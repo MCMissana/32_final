@@ -35,7 +35,6 @@ public class Client {
                     threadCount = Integer.valueOf(parameter);
                     
                     // send to server the threadCount
-                    
                     out.write(threadCount);
                     out.flush();
                     // message sent on flush
@@ -57,12 +56,11 @@ public class Client {
                     }
                 }
             }
-            
             //we are now done the config file and can stop our server
             System.out.println("config finished sending terminate");
-            out.write("END");
+            out.write("TERMINATE");
             out.flush();
-                    
+            
         } catch (IOException | NumberFormatException ex) {
             System.out.println("Exception" + ex);
         }
