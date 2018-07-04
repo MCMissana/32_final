@@ -6,7 +6,7 @@ import java.net.*;
  *
  * @author Ethan Palser, Mathew Erwin, Michael Missana
  */
-public class MainClass {
+public class Client {
 
     public static void main(String args[]) {
         // file to read from
