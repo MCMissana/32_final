@@ -12,8 +12,6 @@ public class MainClass {
         File file = new File("./src/testdata.txt"); // src dirctory not working
         // file to write from, may change
         File log = new File("./src/logdata.txt");
-        // start the server
-        Server skynet = new Server(log); // note: avoid waiting for connection in constructor
         
         int currentChar;
         try {
@@ -58,6 +56,6 @@ public class MainClass {
         } catch (IOException | NumberFormatException ex) {
             System.out.println("Exception" + ex);
         }
-        skynet.close(); // closes writers in server
+        
     }
 }
