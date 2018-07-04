@@ -16,8 +16,12 @@ import java.util.Set;
 public class MainClass {
 
     public static void main(String args[]) throws IOException {
-        
-        
+        File file = new File("./src/testdata.txt"); // src dirctory not working
+        // file to write from, may change
+        File log = new File("./src/logdata.txt");
+        // start the server
+        Server skynet = new Server(log); // note: avoid waiting for connection in constructor
+
         // Selector: multiplexor of SelectableChannel objects
         Selector selector = Selector.open(); // selector is open here
 
@@ -34,8 +38,6 @@ public class MainClass {
         int ops = Socket.validOps();
         SelectionKey selectKy = Socket.register(selector, ops, null);
 
-        
-
         // Infinite loop..
         // Keep server running
         while (true) {
@@ -47,7 +49,8 @@ public class MainClass {
             // token representing the registration of a SelectableChannel with a Selector
             Set<SelectionKey> Keys = selector.selectedKeys();
             Iterator<SelectionKey> Iterator = Keys.iterator();
-
+            String result = "";
+            
             while (Iterator.hasNext()) {
                 SelectionKey myKey = Iterator.next();
 
@@ -68,43 +71,29 @@ public class MainClass {
                     SocketChannel Client = (SocketChannel) myKey.channel();
                     ByteBuffer crunchifyBuffer = ByteBuffer.allocate(256);
                     Client.read(crunchifyBuffer);
-                    String result = new String(crunchifyBuffer.array()).trim();
-
+                    result = new String(crunchifyBuffer.array()).trim();
+                    
                     System.out.println("Message received: " + result);
-
+                    
                     if (result.equals("FINISHED")) {
                         Client.close();
                         System.out.println("Closing client connection");
                         System.out.println("\nServer will keep running. Try running client again to establish new connection");
+                    } else if(result.equals("TERMINATE")){
+                        break;
+                    } else {
+                        // assuming result is nothing else but a value
+                        double val = Double.parseDouble(result);
+                        skynet.add(val);
                     }
+                    
                 }
                 Iterator.remove();
             }
+            if(result.equals("TERMINATE")){
+                break;
+            }
         }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        /*
-        //////////////////////////////////////////////////////
-        // file to read from
-        File file = new File("./src/testdata.txt"); // src dirctory not working
-        // file to write from, may change
-        File log = new File("./src/logdata.txt");
-        // start the server
-        Server skynet = new Server(log); // note: avoid waiting for connection in constructor
-        
-        // wait here until skynet can finish
-        
         skynet.close(); // closes writers in server
-
-        */
     }
 }
