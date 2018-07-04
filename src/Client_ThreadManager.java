@@ -1,3 +1,10 @@
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
+import java.util.ArrayList;
+
 /**
  *
  * @author Ethan Palser, Mathew Erwin, Michael Missana
@@ -55,8 +62,25 @@ public class Client_ThreadManager {
      * 
      * @param termValue 
      */
-    public void sendMessage(double termValue){
+    public void sendMessage(double termValue) throws IOException, InterruptedException {
+        
         // send a message via buffer to server with a byte version of termValue
+        InetSocketAddress address = new InetSocketAddress("localhost", 4381);
+        SocketChannel Client = SocketChannel.open(address);
+
+        System.out.println("Connecting to Server on port 4381...");
+
+        byte[] message = new String(String.valueOf(termValue)).getBytes();
+        ByteBuffer buffer = ByteBuffer.wrap(message);
+        Client.write(buffer);
+
+        System.out.println("sending: " + termValue);
+        buffer.clear();
+
+
+        
+        Client.close();
+        
     }
     
     /**

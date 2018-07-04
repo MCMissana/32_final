@@ -1,5 +1,8 @@
 
 import java.io.*;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 /**
  *
@@ -45,7 +48,11 @@ public class MainClass {
                         } catch (InterruptedException ex) {
                         }
                     }
-
+                    //tells our server we have reached the end of this batch
+                    try{
+                        sendEndofBatch();
+                    }catch(Exception e){}
+                    
                     parameter = ""; //reset our parameter
                 } else {
                     if ((char) currentChar != (char) 13) {
@@ -57,5 +64,22 @@ public class MainClass {
             System.out.println("Exception" + ex);
         }
         
+    }
+    
+    public static void sendEndofBatch() throws IOException, InterruptedException {
+        // send a message via buffer to server with a byte version of termValue
+        InetSocketAddress address = new InetSocketAddress("localhost", 4381);
+        SocketChannel Client = SocketChannel.open(address);
+
+        System.out.println("Connecting to Server on port 4381...");
+
+        byte[] message = new String("END").getBytes();
+        ByteBuffer buffer = ByteBuffer.wrap(message);
+        Client.write(buffer);
+
+        System.out.println("sending: END");
+        buffer.clear();
+
+        Client.close();
     }
 }
