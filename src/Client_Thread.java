@@ -1,3 +1,4 @@
+import java.io.*;
 /**
  * This class extends Client_Thread to be an object which can run as its own
  thread,&nbsp however, using extends prevents the object from subclassing
@@ -93,7 +94,9 @@ public class Client_Thread extends Thread {
             temp.lock(prev);
             temp.lock(termNum);
             // sends term value to thread manager to send to server
-            temp.sendMessage(this.term());
+            try{
+                temp.sendMessage(this.term());
+            }catch(IOException | InterruptedException e){}
             // checks if this is the last thread to execute, using the count
             if(temp.count() >= temp.limit){
                 System.out.println("Final thread of batch completed");

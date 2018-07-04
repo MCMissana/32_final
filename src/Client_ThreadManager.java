@@ -13,6 +13,7 @@ public class Client_ThreadManager {
 
     public static int limit;
     private static Client_ThreadManager manager;
+    ByteBuffer buffer;
     
     boolean[] locks; // tracks lock state of threads to limit critical region access.
     int count; // increments when thread adds term
@@ -71,7 +72,7 @@ public class Client_ThreadManager {
         System.out.println("Connecting to Server on port 4381...");
 
         byte[] message = new String(String.valueOf(termValue)).getBytes();
-        ByteBuffer buffer = ByteBuffer.wrap(message);
+        buffer = ByteBuffer.wrap(message);
         Client.write(buffer);
 
         System.out.println("sending: " + termValue);
