@@ -73,6 +73,10 @@ public class MainClass {
                     Client.read(crunchifyBuffer);
                     result = new String(crunchifyBuffer.array()).trim();
                     
+                    if(result == null){
+                         System.out.println("Message failed");
+                         result = "";
+                    }
                     System.out.println("Message received: " + result);
                     
                     if (result.equals("FINISHED")) {
