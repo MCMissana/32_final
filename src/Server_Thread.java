@@ -1,17 +1,17 @@
 /**
- * This class extends Client_Thread to be an object which can run as its own
- thread,&nbsp however, using extends prevents the object from subclassing
+ * This class extends Server_Thread to be an object which can run as its own
+ * thread,&nbsp however, using extends prevents the object from subclassing
  * another object&nbsp restricting its usage.
  *
  * @author Ethan Palser, Mathew Erwin, Michael Missana
  */
-public class Client_Thread extends Thread {
+public class Server_Thread extends Thread {
 
     public int threadNum;
     public double aprox;
     public boolean interested; // locally stored check for locking other threads, may not use
 
-    public Client_Thread(int termNum) {
+    public Server_Thread(int termNum) {
         threadNum = termNum;
     }
 
@@ -73,7 +73,7 @@ public class Client_Thread extends Thread {
         int prev;
         prev = threadNum - 1;
         if (threadNum == 0) {
-            prev = Client_ThreadManager.limit - 1;
+            prev = Server_ThreadManager.limit - 1;
         }
         return prev;
     }
@@ -88,7 +88,7 @@ public class Client_Thread extends Thread {
      */
     private synchronized void enter_region(int termNum) {
         int prev = this.prevThread();
-        Client_ThreadManager temp = Client_ThreadManager.getInstance();
+        Server_ThreadManager temp = Server_ThreadManager.getInstance();
         if (temp.isUnlock(prev) || temp.isUnlock(threadNum)) {
             temp.lock(prev);
             temp.lock(termNum);
@@ -110,7 +110,7 @@ public class Client_Thread extends Thread {
      */
     private synchronized void leave_region(int termNum) {
         int prev = this.prevThread();
-        Client_ThreadManager temp = Client_ThreadManager.getInstance();
+        Server_ThreadManager temp = Server_ThreadManager.getInstance();
         
         /**
          * aprox check is for if it has been modified and needs to unlock
