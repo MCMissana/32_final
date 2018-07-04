@@ -18,6 +18,7 @@ public class Client {
             Socket sock = new Socket();
             // connect to server
             sock.connect(new InetSocketAddress("localhost", 4380));
+            System.out.println("socket: " + sock);
             PrintWriter out = new PrintWriter(sock.getOutputStream(),true);
             BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             
@@ -35,6 +36,7 @@ public class Client {
                     threadCount = Integer.valueOf(parameter);
                     
                     // send to server the threadCount
+                    System.out.println("sending: ("+threadCount+")");
                     out.write(threadCount);
                     out.flush();
                     // message sent on flush
@@ -43,6 +45,7 @@ public class Client {
                     
                     //wait for servers response for x amount of threads
                     String response;
+                    System.out.println("Waiting For response");
                     while(true){
                         if((response = in.readLine()) !=null || (response = in.readLine()) !="" ){
                             System.out.println("server response ("+response+")");
