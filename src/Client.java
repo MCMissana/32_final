@@ -18,6 +18,8 @@ public class Client {
             Socket sock = new Socket();
             // connect to server
             sock.connect(new InetSocketAddress("localhost", 4380));
+            PrintWriter out = new PrintWriter(sock.getOutputStream(),true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             
             // create a stream that will be reading from a file
             FileInputStream input = new FileInputStream(file);
@@ -33,18 +35,34 @@ public class Client {
                     threadCount = Integer.valueOf(parameter);
                     
                     // send to server the threadCount
-                    OutputStream out = sock.getOutputStream();
+                    
                     out.write(threadCount);
                     out.flush();
                     // message sent on flush
                     
                     parameter = ""; //reset our parameter
+                    
+                    //wait for servers response for x amount of threads
+                    String response;
+                    while(true){
+                        if((response = in.readLine()) !=null || (response = in.readLine()) !="" ){
+                            System.out.println("server response ("+response+")");
+                            break;
+                        }
+                    }
+                    
                 } else {
                     if ((char) currentChar != (char) 13) {
                         parameter += (char) currentChar;
                     }
                 }
             }
+            
+            //we are now done the config file and can stop our server
+            System.out.println("config finished sending terminate");
+            out.write("END");
+            out.flush();
+                    
         } catch (IOException | NumberFormatException ex) {
             System.out.println("Exception" + ex);
         }
