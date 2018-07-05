@@ -64,9 +64,11 @@ public class Client {
             System.out.println("config finished sending terminate");
             out.write("TERMINATE");
             out.flush();
+            sock.close();
 
         } catch (IOException | NumberFormatException ex) {
             System.out.println("Exception" + ex);
         }
+            
     }
 }
