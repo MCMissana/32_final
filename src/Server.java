@@ -26,7 +26,6 @@ public class Server {
 
             // infinite loop until a message says to end
             while (true) {
-                System.out.println("Loop started");
                 String message = in.readLine();
                 System.out.println("Message read");
                 System.out.println("Message: " + message);
@@ -59,7 +58,6 @@ public class Server {
                     System.out.println("Sending: " + temp.result());
                     out.println(temp.result());
                 }
-                System.out.println("End");
             }
             //close our connections
             clientSock.close();
