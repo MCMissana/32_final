@@ -61,6 +61,10 @@ public class Server {
                 }
                 System.out.println("End");
             }
+            //close our connections
+            clientSock.close();
+            serSock.close();
+            
         } catch (IOException | NumberFormatException ex) {
             System.out.println("Exception" + ex);
         }
