@@ -93,10 +93,13 @@ public class Server_Thread extends Thread {
             temp.lock(prev);
             temp.lock(termNum);
             // sends term value to thread manager to send to server
-            temp.sendMessage(this.term());
+            temp.add(this.term());
+            temp.printLog(aprox);
             // checks if this is the last thread to execute, using the count
             if(temp.count() >= temp.limit){
-                System.out.println("Final thread of batch completed");
+                System.out.println("Thread Count: " + 
+                    Server_ThreadManager.limit +" | " + temp.result());
+                temp.printResult();
             }
         }
         temp = null; // dispose later by java

@@ -42,9 +42,9 @@ public class Server_ThreadManager {
 
     /**
      * With the constructor private this will return this object and will ensure
- that there will only ever be one instance of Server_ThreadManager, if
- this class has not been instantiated it will be when this method is
- called.
+     * that there will only ever be one instance of Server_ThreadManager, if
+     * this class has not been instantiated it will be when this method is
+     * called.
      *
      * @return This
      */
@@ -57,9 +57,9 @@ public class Server_ThreadManager {
 
     /**
      * With the constructor private this will return this object and will ensure
- that there will only ever be one instance of Server_ThreadManager, if
- this class has not been instantiated it will be when this method is
- called.&nbspThis has been altered to act like the constructor of the
+     * that there will only ever be one instance of Server_ThreadManager, if
+     * this class has not been instantiated it will be when this method is
+     * called.&nbspThis has been altered to act like the constructor of the
      * class without allowing multiple instances of the manager to exist.
      *
      * @return This
@@ -73,25 +73,6 @@ public class Server_ThreadManager {
     }
 
     /**
-     * This method sends a message/value to the server for it to receive
-     * and handle.
-     * 
-     * @param termValue 
-     */
-    public void sendMessage(double termValue){
-        // send a message via buffer to server with a byte version of termValue
-    }
-    
-    /**
-     * This method listens for a message from the server for it to use.
-     */
-    public void receiveMessage(){
-        // do something with byte stream sent, change void to an actual type
-        byte[] message;
-    }
-    
-     
-    /**
      * This method adds the termValue to the total estimate for PI/4, and
      * increments a counter to check when enough terms have been added.
      *
@@ -99,6 +80,7 @@ public class Server_ThreadManager {
      */
     public void add(double termVal) {
         esta += termVal;
+        count++;
     }
 
     /**
@@ -109,7 +91,7 @@ public class Server_ThreadManager {
     public double result() {
         return esta;
     }
-    
+
     /**
      * This method returns the current count for terms added to the estimate.
      *
@@ -169,6 +151,7 @@ public class Server_ThreadManager {
     public void reset() {
         locks = new boolean[limit]; // default value is false
         count = 0;
+        esta = 0;
     }
 
     /**
@@ -176,7 +159,7 @@ public class Server_ThreadManager {
      */
     public void printResult() {
         try {
-            writerResult.write("Current Estimate: " + this.result() + '\n');
+            writerResult.write("Thread Count: " + limit + " | " + this.result() + '\n');
         } catch (IOException ex) {
             //nothing, need to be careful if cannot be found
         }
@@ -187,16 +170,18 @@ public class Server_ThreadManager {
      */
     public void printLog(double threadVal) {
         try {
-            writer.write("Current Estimate: " + this.result()
-                    + " | Current Thread Value: " + threadVal + '\n');
+            writer.write(
+                    "Thread Count: " + count +
+                    " Current Thread Value: " + threadVal +
+                    " | Current Estimate: " + this.result() + '\n');
         } catch (IOException ex) {
             //nothing, need to be careful if cannot be found
         }
     }
-    
+
     /**
-     * This method closes the writer streams that print to
-     * the log and output files.
+     * This method closes the writer streams that print to the log and output
+     * files.
      */
     public void close() {
         try {

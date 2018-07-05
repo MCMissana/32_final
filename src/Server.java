@@ -19,24 +19,24 @@ public class Server {
             ServerSocket serSock = new ServerSocket(4380);
             Socket clientSock = serSock.accept();
             System.out.println("Client connected");
-            
+
             PrintWriter out = new PrintWriter(clientSock.getOutputStream(), true);
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(clientSock.getInputStream()));
-            
+
             // infinite loop until a message says to end
             while (true) {
                 System.out.println("Loop started");
-                String message = "0";
-                while((message = in.readLine()) != null && message != ""){
-                    System.out.println("Message read");
-                    System.out.println(message);
-                }
+                String message = in.readLine();
+                System.out.println("Message read");
+                System.out.println("Message: " + message);
+                    
                 if (message.equals("TERMINATE")) {
                     break;
                 } else {
-                    threadCount = Integer.parseInt(in.readLine());
-
+                    //System.out.println(message);
+                    threadCount = Integer.parseInt(message);
+                    System.out.println("Thread Count: " + threadCount);
                     // setup/initialize Server_ThreadManager
                     Server_ThreadManager temp = Server_ThreadManager.setInstance(threadCount, log);
                     temp.reset();
@@ -56,11 +56,14 @@ public class Server {
                         } catch (InterruptedException ex) {
                         }
                     }
+                    System.out.println("Sending: " + temp.result());
+                    out.println(temp.result());
                 }
                 System.out.println("End");
             }
         } catch (IOException | NumberFormatException ex) {
             System.out.println("Exception" + ex);
         }
+        Server_ThreadManager.getInstance().close();
     }
 }
